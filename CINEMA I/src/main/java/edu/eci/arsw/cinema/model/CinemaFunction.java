@@ -41,6 +41,8 @@ public class CinemaFunction {
             throw new CinemaException("Seat booked");
         }
     }
+
+
     
     public List<List<Boolean>> getSeats() {
         return this.seats;

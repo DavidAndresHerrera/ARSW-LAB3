@@ -11,6 +11,9 @@ import edu.eci.arsw.cinema.model.Movie;
 import edu.eci.arsw.cinema.persistence.CinemaException;
 import edu.eci.arsw.cinema.persistence.CinemaPersistenceException;
 import edu.eci.arsw.cinema.persistence.CinemaPersitence;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +23,9 @@ import java.util.Map;
  *
  * @author cristian
  */
+
+@Service
+@Qualifier("inMemoryCinema")
 public class InMemoryCinemaPersistence implements CinemaPersitence{
     
     private final Map<String,Cinema> cinemas=new HashMap<>();
@@ -38,12 +44,29 @@ public class InMemoryCinemaPersistence implements CinemaPersitence{
 
     @Override
     public void buyTicket(int row, int col, String cinema, String date, String movieName) throws CinemaException {
-        throw new UnsupportedOperationException("Not supported yet."); 
+
+        List<CinemaFunction> temp = cinemas.get(cinema).getFunctions();
+        for (CinemaFunction j:temp ) {
+            if(j.getMovie().equals(movieName) && j.getDate().equals(date)){
+                try{
+                    j.buyTicket(row,col);
+                }catch (CinemaException  e){
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
     public List<CinemaFunction> getFunctionsbyCinemaAndDate(String cinema, String date) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        List<CinemaFunction> temp = cinemas.get(cinema).getFunctions();
+        List<CinemaFunction> funcionesFinales= new ArrayList<>();
+        for (CinemaFunction j:temp ) {
+            if(j.getDate().equals(date)){
+                funcionesFinales.add(j);
+            }
+        }
+        return funcionesFinales;
     }
 
     @Override
@@ -59,6 +82,11 @@ public class InMemoryCinemaPersistence implements CinemaPersitence{
     @Override
     public Cinema getCinema(String name) throws CinemaPersistenceException {
         return cinemas.get(name);
+    }
+
+    @Override
+    public void addCinema(Cinema cinema) {
+        cinemas.put(cinema.getName(),cinema);
     }
 
 }

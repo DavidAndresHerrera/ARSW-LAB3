@@ -2,6 +2,7 @@
 import edu.eci.arsw.cinema.model.Cinema;
 import edu.eci.arsw.cinema.model.CinemaFunction;
 import edu.eci.arsw.cinema.model.Movie;
+import edu.eci.arsw.cinema.persistence.CinemaException;
 import edu.eci.arsw.cinema.persistence.CinemaPersistenceException;
 import edu.eci.arsw.cinema.persistence.impl.InMemoryCinemaPersistence;
 import java.util.ArrayList;
@@ -67,12 +68,32 @@ public class InMemoryPersistenceTest {
         Cinema c2=new Cinema("Movies Bogotá",functions2);
         try{
             ipct.saveCinema(c2);
-            fail("An exception was expected after saving a second cinema with the same name");
+
         }
         catch (CinemaPersistenceException ex){
-            
+            fail("An exception was expected after saving a second cinema with the same name");
         }
-                
-        
+
     }
+
+    @Test
+    public void buyTickets(){
+        InMemoryCinemaPersistence ipct=new InMemoryCinemaPersistence();
+
+        try {
+            ipct.buyTicket(1,1,"cinemaX","2018-12-18 15:30","The Night");
+        } catch (CinemaException e) {
+            fail("No se puedo comprar el ticket");
+        }
+
+
+    }
+
+    @Test
+    public void getFunctionsByCinemaAndDate(){
+        InMemoryCinemaPersistence ipct=new InMemoryCinemaPersistence();
+        ipct.getFunctionsbyCinemaAndDate("cinemaX","2018-12-18 15:30").get(0).getMovie().equals("The Night");
+    }
+
+
 }

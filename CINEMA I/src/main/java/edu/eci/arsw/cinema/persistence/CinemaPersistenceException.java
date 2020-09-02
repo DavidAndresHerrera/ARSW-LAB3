@@ -5,10 +5,14 @@
  */
 package edu.eci.arsw.cinema.persistence;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 /**
  *
  * @author cristian
  */
+
 public class CinemaPersistenceException extends Exception{
 
     public CinemaPersistenceException(String message) {

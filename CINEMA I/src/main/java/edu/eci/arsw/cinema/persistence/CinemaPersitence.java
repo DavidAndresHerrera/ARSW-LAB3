@@ -50,5 +50,6 @@ public interface CinemaPersitence {
      * @throws  CinemaPersistenceException if there is no such cinema
      */
     public Cinema getCinema(String name) throws CinemaPersistenceException;
-    
+
+    void addCinema(Cinema cinema);
 }

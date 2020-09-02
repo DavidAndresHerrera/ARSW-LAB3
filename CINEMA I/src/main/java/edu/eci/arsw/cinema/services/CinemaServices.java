@@ -7,9 +7,13 @@ package edu.eci.arsw.cinema.services;
 
 import edu.eci.arsw.cinema.model.Cinema;
 import edu.eci.arsw.cinema.model.CinemaFunction;
+import edu.eci.arsw.cinema.model.Movie;
 import edu.eci.arsw.cinema.persistence.CinemaException;
+import edu.eci.arsw.cinema.persistence.CinemaFilter;
 import edu.eci.arsw.cinema.persistence.CinemaPersistenceException;
 import edu.eci.arsw.cinema.persistence.CinemaPersitence;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,11 @@ public class CinemaServices {
     @Autowired
     @Qualifier("inMemoryCinema")
     CinemaPersitence cps;
+
+    @Autowired
+    //@Qualifier("byGender")
+    @Qualifier("bySeat")
+    CinemaFilter cinemaFilter;
     
     public void addNewCinema(Cinema c){
         
@@ -66,6 +75,10 @@ public class CinemaServices {
     }
     public void addCinema(Cinema cinema){
         cps.addCinema(cinema);
+    }
+
+    public ArrayList<Movie> getBySeats(String cinema, String date,String gender,  int seats){
+        return cinemaFilter.filter(cinema,date,gender,seats,cps);
     }
 
 }

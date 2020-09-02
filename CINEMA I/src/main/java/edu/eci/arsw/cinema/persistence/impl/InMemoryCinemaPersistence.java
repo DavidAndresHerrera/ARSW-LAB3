@@ -47,7 +47,7 @@ public class InMemoryCinemaPersistence implements CinemaPersitence{
 
         List<CinemaFunction> temp = cinemas.get(cinema).getFunctions();
         for (CinemaFunction j:temp ) {
-            if(j.getMovie().equals(movieName) && j.getDate().equals(date)){
+            if(j.getMovie().getName().equals(movieName) && j.getDate().equals(date)){
                 try{
                     j.buyTicket(row,col);
                 }catch (CinemaException  e){

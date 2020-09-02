@@ -63,8 +63,17 @@ public class CinemaFunction {
     public void setDate(String date) {
         this.date = date;
     }
-    
-    
-    
-    
+
+
+    public int getNumSeats() {
+        int count = 0;
+        for(int i = 0; i < seats.size(); i++){
+            for(int j = 0; j < seats.get(i).size(); j++){
+                if (seats.get(i).get(j)){
+                    count += 1;
+                }
+            }
+        }
+        return count;
+    }
 }

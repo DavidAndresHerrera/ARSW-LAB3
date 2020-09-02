@@ -4,6 +4,8 @@ import edu.eci.arsw.cinema.model.CinemaFunction;
 import edu.eci.arsw.cinema.model.Movie;
 import edu.eci.arsw.cinema.persistence.CinemaException;
 import edu.eci.arsw.cinema.persistence.CinemaPersistenceException;
+import edu.eci.arsw.cinema.persistence.impl.ByGender;
+import edu.eci.arsw.cinema.persistence.impl.BySeat;
 import edu.eci.arsw.cinema.persistence.impl.InMemoryCinemaPersistence;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +70,6 @@ public class InMemoryPersistenceTest {
         Cinema c2=new Cinema("Movies Bogotá",functions2);
         try{
             ipct.saveCinema(c2);
-
         }
         catch (CinemaPersistenceException ex){
             fail("An exception was expected after saving a second cinema with the same name");
@@ -93,6 +94,57 @@ public class InMemoryPersistenceTest {
     public void getFunctionsByCinemaAndDate(){
         InMemoryCinemaPersistence ipct=new InMemoryCinemaPersistence();
         ipct.getFunctionsbyCinemaAndDate("cinemaX","2018-12-18 15:30").get(0).getMovie().equals("The Night");
+    }
+
+    @Test
+    public void getMoviesByGender(){
+        InMemoryCinemaPersistence ipct=new InMemoryCinemaPersistence();
+        ByGender bg = new ByGender();
+
+        String functionDate = "2018-12-18 15:30";
+        List<CinemaFunction> functions= new ArrayList<>();
+        CinemaFunction funct1 = new CinemaFunction(new Movie("SuperHeroes Movie 2","Action"),functionDate);
+        CinemaFunction funct2 = new CinemaFunction(new Movie("The Night 2","Horror"),functionDate);
+        functions.add(funct1);
+        functions.add(funct2);
+        Cinema c=new Cinema("El eden",functions);
+
+        try {
+            ipct.saveCinema(c);
+            ArrayList<Movie> finals = bg.filter("El eden","2018-12-18 15:30","Horror",20,ipct);
+            assertEquals(finals.size(),1);
+        } catch (CinemaPersistenceException ex) {
+            fail("Cinema persistence failed getting movies by gender");
+        }
+
+    }
+
+
+    @Test
+    public void getMoviesBySeats(){
+        InMemoryCinemaPersistence ipct=new InMemoryCinemaPersistence();
+        BySeat bg = new BySeat();
+
+        String functionDate = "2018-12-18 15:30";
+        List<CinemaFunction> functions= new ArrayList<>();
+        CinemaFunction funct1 = new CinemaFunction(new Movie("SuperHeroes Movie 2","Horror"),functionDate);
+        CinemaFunction funct2 = new CinemaFunction(new Movie("The Night 2","Horror"),functionDate);
+        functions.add(funct1);
+        functions.add(funct2);
+        Cinema c=new Cinema("El eden",functions);
+
+        try {
+            ipct.saveCinema(c);
+            ipct.buyTicket(1, 3, "El eden","2018-12-18 15:30","The Night 2");
+            ipct.buyTicket(3, 3, "El eden","2018-12-18 15:30","The Night 2");
+            ArrayList<Movie> finals = bg.filter("El eden","2018-12-18 15:30","Horror",83,ipct);
+            assertEquals(finals.get(0).getName(), "SuperHeroes Movie 2");
+        } catch (CinemaPersistenceException ex) {
+            fail("Cinema persistence failed getting movies by gender");
+        } catch (CinemaException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

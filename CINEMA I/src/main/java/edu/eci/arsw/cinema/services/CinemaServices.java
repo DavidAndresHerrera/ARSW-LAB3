@@ -77,7 +77,7 @@ public class CinemaServices {
         cps.addCinema(cinema);
     }
 
-    public ArrayList<Movie> getBySeats(String cinema, String date,String gender,  int seats){
+    public ArrayList<Movie> getBy(String cinema, String date,String gender,  int seats){
         return cinemaFilter.filter(cinema,date,gender,seats,cps);
     }
 

@@ -37,7 +37,7 @@ public class Main {
     }
 
     private static void filter(CinemaServices gc) {
-        ArrayList<Movie> peliculas = gc.getBySeats("El eden","2019-12-22 15:30","Fiction",81);
+        ArrayList<Movie> peliculas = gc.getBy("El eden","2019-12-22 15:30","Fiction",81);
         for (int i = 0; i < peliculas.size() ; i++){
             System.out.println(peliculas.get(i).getName());
         }
